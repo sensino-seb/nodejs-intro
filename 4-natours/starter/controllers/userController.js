@@ -11,6 +11,17 @@ try {
 // parse the file into a JSON object
 let users = JSON.parse(fs.readFileSync(usersFile, 'utf-8'));
 
+exports.checkID = (req, res, next, val) => {
+  console.log(`User with ID: ${val}`);
+  if (Number(req.params.id) > users.length || Number(req.params.id) < 0) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'Invalid ID',
+    });
+  }
+  next();
+};
+
 // USER ROUTE HANDLERS
 exports.getAllUsers = (req, res) => {
   // define JSend response
@@ -29,13 +40,6 @@ exports.getOneUser = (req, res) => {
   // convert id to number and find it in tours data
   const userId = Number(req.params._id);
   const user = users[userId];
-
-  if (userId > users.length || userId < 0 || !userId) {
-    return res.status(404).json({
-      status: 'fail',
-      message: 'Invalid ID',
-    });
-  }
 
   // build JSend standard for client response
   res.status(200).json({

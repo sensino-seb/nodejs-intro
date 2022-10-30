@@ -14,6 +14,28 @@ try {
 // parse the file into a JSON object
 let tours = JSON.parse(fs.readFileSync(toursFile, 'utf-8'));
 
+exports.checkID = (req, res, next, val) => {
+  console.log(`Tour with ID: ${val}`);
+  if (Number(req.params.id) > tours.length || Number(req.params.id) < 0) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'Invalid ID',
+    });
+  }
+  next();
+};
+
+exports.checkBody = (req, res, next) => {
+  if (!req.body.name || !req.body.price) {
+    return res.status(400).json({
+      status: 'fail',
+      message: 'Invalid request body',
+    });
+  }
+
+  next();
+};
+
 // TOUR ROUTE HANDLERS
 exports.getAllTours = (req, res) => {
   // build JSend standard for client response
@@ -29,16 +51,8 @@ exports.getAllTours = (req, res) => {
 
 exports.getOneTour = (req, res) => {
   // ':id' serves as a variable and can be read with req.params.[variable name]
-  // convert id to number and find it in tours data
   const tourId = Number(req.params.id);
   const tour = tours[tourId];
-
-  if (tourId > tours.length || tourId < 0 || !tourId) {
-    return res.status(404).json({
-      status: 'fail',
-      message: 'Invalid ID',
-    });
-  }
 
   // build JSend standard for client response
   res.status(200).json({

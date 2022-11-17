@@ -12,11 +12,12 @@ mongoose
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
+    useUnifiedTopology: true,
   })
   .then(() => console.log('DB connection established!'));
 
 // 3) START SERVER
 const port = process.env.PORT || 3000;
-app.listen(process.env.port, (req, res) => {
+app.listen(port, (req, res) => {
   console.log(`Express server is listening on port: ${port}`);
 });

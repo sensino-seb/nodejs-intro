@@ -1,4 +1,3 @@
-const fs = require('fs');
 const Tour = require('./../models/tourModel.js');
 
 // TOUR ROUTE HANDLERS

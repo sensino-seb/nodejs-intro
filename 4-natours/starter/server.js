@@ -18,6 +18,24 @@ mongoose
 
 // 3) START SERVER
 const port = process.env.PORT || 3000;
-app.listen(port, (req, res) => {
+const server = app.listen(port, (req, res) => {
   console.log(`Express server is listening on port: ${port}`);
+});
+
+process.on('unhandledRejection', (err) => {
+  console.log('UNHANDLED REJECTION! Shutting down application...');
+  console.log(err.name, err.message);
+
+  server.close(() => {
+    process.exit(1);
+  });
+});
+
+process.on('uncaughtException', (err) => {
+  console.log('UNCAUGHT EXCEPTION! Shutting down application...');
+  console.log(err.name, err.message);
+
+  server.close(() => {
+    process.exit(1);
+  });
 });

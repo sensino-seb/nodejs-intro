@@ -1,7 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 
-const AppError = require('./utils/appError');
+const errorHanlder = require('./utils/appError');
 const errorController = require('./controllers/errorController');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
@@ -29,10 +29,9 @@ app.all('*', (req, res, next) => {
   // err.status = 'fail';
 
   // if err is passed to next, express goes directly to the error handler middleware
-  next(new AppError(`Cannot find ${req.originalUrl} on this server!`, 404));
+  next(new errorHanlder(`Cannot find ${req.originalUrl} on this server!`, 404));
 });
 
-// express automatically knows that this is error handling middleware
 app.use(errorController);
 
 module.exports = app;
